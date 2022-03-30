@@ -1,0 +1,396 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+variables:
+  buildConfiguration: 'Release'
+  serviceConnection : 'az-serviceprincipal'
+  uniqueStringResourceGroupID: 'dtdlglxmviv7m'
+
+stages:
+- stage : 'BuildCommandesApi' 
+  displayName:  'Build/publication API commandes'
+  pool:
+    vmImage: 'ubuntu-latest'
+  jobs:
+    - job : 'BuildCommandesApi'
+      steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'restore'
+          projects: '**/*Commandes.API.csproj'
+          feedsToUse: 'select'
+        displayName: 'Restaurer les packages'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          projects: '**/*Commandes.API.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+        displayName: 'Génération de la solution'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          publishWebProjects: false
+          projects: '**/*Commandes.API.csproj'
+          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        displayName: 'Génération du package de publication'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'commandes-drop'
+          publishLocation: 'Container'
+        displayName: 'Publication du package dans Azure DevOps'
+- stage : 'DeployCommandesApiToProd' 
+  displayName:  'Déploiment API commandes'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: 'BuildCommandesApi'
+  jobs:
+    - deployment : 'DeployCommandesApiToProd'
+      environment: 'Prod'
+      strategy:
+        runOnce:
+         deploy:
+           steps:
+           - task: DownloadBuildArtifacts@0
+             inputs:
+                buildType: 'current'
+                downloadType: 'single'
+                artifactName: 'commandes-drop'
+                downloadPath: '$(System.ArtifactsDirectory)'
+             displayName: 'Téléchargement du package'
+           - task: AzureRmWebAppDeployment@4
+             inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: '$(serviceConnection)'
+                appType: 'webApp'
+                WebAppName: 'CommandesAPI-$(uniqueStringResourceGroupID)'
+                package: '$(Build.ArtifactStagingDirectory)/**/*Commandes.API.zip'
+             displayName: 'Déploiment de application'
+
+- stage : 'BuildFavorisApi' 
+  displayName:  'Build/publication de API favoris'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: []
+  jobs:
+    - job : 'BuildFavorisApi'
+      steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'restore'
+          projects: '**/*Favoris.API.csproj'
+          feedsToUse: 'select'
+        displayName: 'Restaurer les packages'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          projects: '**/*Favoris.API.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+        displayName: 'Génération de la solution'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          publishWebProjects: false
+          projects: '**/*Favoris.API.csproj'
+          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        displayName: 'Génération du package de publication'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'favoris-drop'
+          publishLocation: 'Container'
+        displayName: 'Publication du package dans Azure DevOps'
+
+- stage : 'DeployFavorisApiToProd' 
+  displayName:  'Déploiment API favoris'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: 'BuildFavorisApi'
+  jobs:
+    - deployment : 'DeployFavorisApiToProd'
+      environment: 'Prod'
+      strategy:
+        runOnce:
+         deploy:
+           steps:
+           - task: DownloadBuildArtifacts@0
+             inputs:
+                buildType: 'current'
+                downloadType: 'single'
+                artifactName: 'favoris-drop'
+                downloadPath: '$(System.ArtifactsDirectory)'
+             displayName: 'Téléchargement du package'
+           - task: AzureRmWebAppDeployment@4
+             inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: '$(serviceConnection)'
+                appType: 'webApp'
+                WebAppName: 'FavorisAPI-$(uniqueStringResourceGroupID)'
+                package: '$(Build.ArtifactStagingDirectory)/**/*Favoris.API.zip'
+             displayName: 'Déploiment de application'
+
+- stage : 'BuildFichiersApi' 
+  displayName:  'Build/publication de API fichiers'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: []
+  jobs:
+    - job : 'BuildFichiersApi'
+      steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'restore'
+          projects: '**/*Fichiers.API.csproj'
+          feedsToUse: 'select'
+        displayName: 'Restaurer les packages'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          projects: '**/*Fichiers.API.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+        displayName: 'Génération de la solution'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          publishWebProjects: false
+          projects: '**/*Fichiers.API.csproj'
+          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        displayName: 'Génération du package de publication'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'fichiers-drop'
+          publishLocation: 'Container'
+        displayName: 'Publication du package dans Azure DevOps'
+
+- stage : 'DeployFichiersApiToProd' 
+  displayName:  'Déploiment API fichiers'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: 'BuildFichiersApi'
+  jobs:
+    - deployment : 'DeployFichiersApiToProd'
+      environment: 'Prod'
+      strategy:
+        runOnce:
+         deploy:
+           steps:
+           - task: DownloadBuildArtifacts@0
+             inputs:
+                buildType: 'current'
+                downloadType: 'single'
+                artifactName: 'fichiers-drop'
+                downloadPath: '$(System.ArtifactsDirectory)'
+             displayName: 'Téléchargement du package'
+           - task: AzureRmWebAppDeployment@4
+             inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: '$(serviceConnection)'
+                appType: 'webApp'
+                WebAppName: 'FichiersAPI-$(uniqueStringResourceGroupID)'
+                package: '$(Build.ArtifactStagingDirectory)/**/*Fichiers.API.zip'
+             displayName: 'Déploiment de application'
+
+- stage : 'BuildUtilisateursApi' 
+  displayName:  'Build/publication de API utilisateurs'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: []
+  jobs:
+    - job : 'BuildUtilisateursApi'
+      steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'restore'
+          projects: '**/*Utilisateurs.API.csproj'
+          feedsToUse: 'select'
+        displayName: 'Restaurer les packages'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          projects: '**/*Utilisateurs.API.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+        displayName: 'Génération de la solution'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          publishWebProjects: false
+          projects: '**/*Utilisateurs.API.csproj'
+          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        displayName: 'Génération du package de publication'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'utilisateurs-drop'
+          publishLocation: 'Container'
+        displayName: 'Publication du package dans Azure DevOps'
+
+- stage : 'DeployUtilisateursApiToProd' 
+  displayName:  'Déploiment API utilisateurs'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: 'BuildUtilisateursApi'
+  jobs:
+    - deployment : 'DeployUtilisateursApiToProd'
+      environment: 'Prod'
+      strategy:
+        runOnce:
+         deploy:
+           steps:
+           - task: DownloadBuildArtifacts@0
+             inputs:
+                buildType: 'current'
+                downloadType: 'single'
+                artifactName: 'utilisateurs-drop'
+                downloadPath: '$(System.ArtifactsDirectory)'
+             displayName: 'Téléchargement du package'
+           - task: AzureRmWebAppDeployment@4
+             inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: '$(serviceConnection)'
+                appType: 'webApp'
+                WebAppName: 'UtilisateursAPI-$(uniqueStringResourceGroupID)'
+                package: '$(Build.ArtifactStagingDirectory)/**/*Utilisateurs.API.zip'
+             displayName: 'Déploiment de application'
+
+- stage : 'BuildVehiculesApi' 
+  displayName:  'Build/publication de API véhicules'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: []
+  jobs:
+    - job : 'BuildVehiculesApi'
+      steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'restore'
+          projects: '**/*Vehicules.API.csproj'
+          feedsToUse: 'select'
+        displayName: 'Restaurer les packages'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          projects: '**/*Vehicules.API.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+        displayName: 'Génération de la solution'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          publishWebProjects: false
+          projects: '**/*Vehicules.API.csproj'
+          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        displayName: 'Génération du package de publication'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'vehicules-drop'
+          publishLocation: 'Container'
+        displayName: 'Publication du package dans Azure DevOps'
+
+- stage : 'DeployVehiculesApiToProd' 
+  displayName:  'Déploiment API utilisateurs'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: 'BuildVehiculesApi'
+  jobs:
+    - deployment : 'DeployVehiculesApiToProd'
+      environment: 'Prod'
+      strategy:
+        runOnce:
+         deploy:
+           steps:
+           - task: DownloadBuildArtifacts@0
+             inputs:
+                buildType: 'current'
+                downloadType: 'single'
+                artifactName: 'vehicules-drop'
+                downloadPath: '$(System.ArtifactsDirectory)'
+             displayName: 'Téléchargement du package'
+           - task: AzureRmWebAppDeployment@4
+             inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: '$(serviceConnection)'
+                appType: 'webApp'
+                WebAppName: 'VehiculesAPI-$(uniqueStringResourceGroupID)'
+                package: '$(Build.ArtifactStagingDirectory)/**/*Vehicules.API.zip'
+             displayName: 'Déploiment de application'
+
+- stage : 'BuildClientMvc' 
+  displayName:  'Build/exécution tests et publication MVC'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn: []
+  jobs:
+    - job : 'BuildClientMvc'
+      steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'restore'
+          projects: '**/*MVC.csproj'
+          feedsToUse: 'select'
+        displayName: 'Restaurer les packages'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          projects: '**/*MVC.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+        displayName: 'Génération de la solution'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'test'
+          projects: '**/*MVC.UnitTests.csproj'
+          arguments: '--configuration $(buildConfiguration)'
+        displayName: 'Exécution des tests unitaires'
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'publish'
+          publishWebProjects: true
+          projects: '**/*MVC.csproj'
+          arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        displayName: 'Génération du package de publication'
+      - task: PublishBuildArtifacts@1
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          ArtifactName: 'mvc-drop'
+          publishLocation: 'Container'
+        displayName: 'Publication du package dans Azure DevOps'
+
+- stage : 'DeployClientMvcToProd' 
+  displayName:  'Déploiment MVC'
+  pool:
+    vmImage: 'ubuntu-latest'
+  dependsOn:
+  - 'BuildClientMvc'
+  - 'DeployCommandesApiToProd'
+  - 'DeployFavorisApiToProd'
+  - 'DeployFichiersApiToProd'
+  - 'DeployUtilisateursApiToProd'
+  - 'DeployVehiculesApiToProd'
+  condition: 'succeeded()'
+  jobs:
+    - deployment : 'DeployClientMvcToProd'
+      environment: 'Prod'
+      strategy:
+        runOnce:
+         deploy:
+           steps:
+           - task: DownloadBuildArtifacts@0
+             inputs:
+                buildType: 'current'
+                downloadType: 'single'
+                artifactName: 'mvc-drop'
+                downloadPath: '$(System.ArtifactsDirectory)'
+             displayName: 'Téléchargement du package'
+           - task: AzureRmWebAppDeployment@4
+             inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: '$(serviceConnection)'
+                appType: 'webApp'
+                WebAppName: 'ClientMVC-$(uniqueStringResourceGroupID)'
+                package: '$(Build.ArtifactStagingDirectory)/**/*MVC.zip'
+             displayName: 'Déploiment de application'

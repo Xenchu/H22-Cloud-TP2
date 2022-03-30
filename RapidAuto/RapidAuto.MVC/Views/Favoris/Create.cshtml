@@ -1,0 +1,101 @@
+﻿@model RapidAuto.MVC.Models.Vehicule
+
+@{
+    ViewData["Title"] = "Create";
+
+    //var pathImages = @"https:\\localhost:7031\";
+}
+
+<h1>Ajouter un véhicule à vos favoris</h1>
+
+<h4>Voulez-vous ajouter ce véhicule ?</h4>
+<hr />
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Constructeur)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Constructeur)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Modele)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Modele)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Annee)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Annee)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TypeVehicule)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TypeVehicule)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NombreDeSieges)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NombreDeSieges)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Couleur)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Couleur)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NIV)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NIV)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EstDisponible)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EstDisponible)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Prix)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Prix)
+        </dd>
+        @* <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.NomImage1)
+        </dt>
+        <dd class="col-sm-10">
+            <img src="@(pathImages+Model.NomImage1)" alt="Model.NomImage1" width="300px" height="200px" title="Model.NomImage1"/> 
+        </dd>*@
+    </dl>
+
+    <form asp-action="Create">
+        @Html.HiddenFor(v => v.Id)
+        @Html.HiddenFor(v => v.Constructeur)
+        @Html.HiddenFor(v => v.Modele)
+        @Html.HiddenFor(v => v.Annee)
+        @Html.HiddenFor(v => v.TypeVehicule)
+        @Html.HiddenFor(v => v.NombreDeSieges)
+        @Html.HiddenFor(v => v.Couleur)
+        @Html.HiddenFor(v => v.NIV)
+        @Html.HiddenFor(v => v.NomImage1)
+        @Html.HiddenFor(v => v.NomImage2)
+        @Html.HiddenFor(v => v.Description)
+        @Html.HiddenFor(v => v.EstDisponible)
+        @Html.HiddenFor(v => v.Prix)
+
+        <input type="submit" value="Ajouter" class="btn btn-primary" />
+        <a asp-action="Index">Retour à vos favoris</a>
+    </form>
+</div>

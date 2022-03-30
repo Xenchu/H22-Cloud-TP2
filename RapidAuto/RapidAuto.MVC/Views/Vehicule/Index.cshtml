@@ -1,0 +1,92 @@
+﻿@model IEnumerable<RapidAuto.MVC.Models.Vehicule>
+@inject IConfiguration _config
+
+@{
+    ViewData["Title"] = "Index";
+    
+    var pathImages = ViewBag.UrlConteneur; 
+
+    // Pour filtrer selon le constructeur
+    var constructeur = Context.Request.Query["constructeur"].ToString();
+    var listeVehiculesFiltree = new List<Vehicule>();
+    listeVehiculesFiltree = Model.ToList();
+
+    if (!string.IsNullOrEmpty(constructeur))
+    {
+        listeVehiculesFiltree = listeVehiculesFiltree.Where(v => v.Constructeur == constructeur).ToList();
+    }
+}
+
+<h1>Liste des véhicules</h1>
+
+<p>
+    <a asp-action="Create">Ajouter un nouveau véhicule</a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Recherche: <input type="text" name="searchString" value="@ViewData["CurrentFilter"]"/>
+            <input type="submit" value="Recherche" class="btn btn-primary" />
+            <a asp-action="Index">Retour à la liste des véhicules</a>
+        </p>
+        <div>
+            Constructeurs
+            <ol>
+            @foreach(var item in Model.Select(x => x.Constructeur).Distinct())
+            {
+                <li><a asp-route-constructeur="@item">@item</a></li>
+            }
+            </ol>
+        </div>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Image1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Constructeur)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Modele)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Annee)
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-ordreDeTri="@ViewData["TriParPrix"]">@Html.DisplayNameFor(model => model.Prix)</a> 
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in listeVehiculesFiltree) {
+        <tr>
+            <td>
+                <img src="@(pathImages+item.NomImage1)" alt="@item.NomImage1" width="300px" height="200px" title="@item.NomImage1"/>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Constructeur)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Modele)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Annee)
+            </td>           
+            <td>
+                @Html.DisplayFor(modelItem => item.Prix)
+            </td>
+            <td>
+                @Html.ActionLink("Modifier", "Edit", new {  id=item.Id  }) |
+                @Html.ActionLink("Afficher", "Details", new { id=item.Id }) |
+                @Html.ActionLink("Supprimer", "Delete", new {  id=item.Id  })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,104 @@
+﻿@model IEnumerable<RapidAuto.MVC.Models.Vehicule>
+
+@{
+    ViewData["Title"] = "Index";
+
+    var pathImages = @"https:\\localhost:7031\";
+}
+
+<h1>Véhicules favoris</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Constructeur)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Modele)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Annee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeVehicule)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NombreDeSieges)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Couleur)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NIV)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstDisponible)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prix)
+            </th>
+            <th>
+                Image
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Constructeur)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Modele)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Annee)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TypeVehicule)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreDeSieges)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Couleur)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NIV)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstDisponible)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prix)
+            </td>
+            @{
+                if (item.NomImage1 == null)
+                {
+                    <td>
+                        Aucune image
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <img src="@(pathImages+item.NomImage1)" alt="@item.NomImage1" width="300px" height="200px" title="@item.NomImage1"/>
+                    </td>
+                }
+            }
+            <td>
+                <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("Details", "Vehicule", new { item.Id })'">Détails du véhicule</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="location.href='@Url.Action("Delete", "Favoris", new { idVehicule = item.Id })'">Supprimer</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

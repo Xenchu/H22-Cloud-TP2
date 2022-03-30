@@ -1,0 +1,65 @@
+﻿@model IEnumerable<RapidAuto.MVC.Models.Utilisateur>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Liste des utilisateurs</h1>
+
+<p>
+    <a asp-action="Create">Ajouter un utilisateur</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdentifiantUtilisateur)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prenom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Adresse)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroTelephone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdentifiantUtilisateur)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prenom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Adresse)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroTelephone)
+            </td>
+            <td>
+                @Html.ActionLink("Modifier", "Edit", new { item.Id }) |
+                @Html.ActionLink("Détails", "Details", new { item.Id }) |
+                @Html.ActionLink("Supprimer", "Delete", new { item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

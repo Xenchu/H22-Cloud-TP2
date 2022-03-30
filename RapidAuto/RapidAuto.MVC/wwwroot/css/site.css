@@ -1,0 +1,57 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  background-image: url('../bckg_img.jpg');
+  background-attachment:fixed;
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+}
+
+.div-flex {
+    display: flex;
+    justify-content: center;
+}
+
+.flex1, .flex2, .flex3, .flex4 {
+    border: 1px solid black;
+    border-radius : 5px;
+    margin: 10px;
+    padding: 10px;
+}
+
+ol li{
+    list-style:none;
+}
+
+.titre_supprimer {
+    color:red;
+}
+
+.div-flex2 {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.div-flex2 div {
+    padding: 20px 20px 0px 0px;
+}
+
+.p_important {
+    color:red;
+    font-weight:bold;
+    padding: 20px 0px 0px 0px
+}

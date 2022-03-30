@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Bienvenue sur RapidAuto</h1>
+    <p>Veuillez consulter nos services offerts dans la barre de navigation.</p>
+    <hr />
+    <div class="div-flex">
+        <div class="flex1"><a class="nav-link text-dark" asp-area="" asp-controller="Vehicule" asp-action="Index"><img src="~/Vehicule_Icon.png" title="Véhicules" width="80px" height="80px"/></a></div>
+        <div class="flex2"><a class="nav-link text-dark" asp-area="" asp-controller="Favoris" asp-action="Index"><img src="~/favoris_icon.png" title="Favoris" width="80px" height="80px"/></a></div>
+        <div class="flex3"><a class="nav-link text-dark" asp-area="" asp-controller="Commande" asp-action="Index"><img src="~/commande_icon.png" title="Commandes" width="80px" height="80px"/></a></div>
+        <div class="flex4"><a class="nav-link text-dark" asp-area="" asp-controller="Utilisateur" asp-action="Index"><img src="~/user_icon.png" title="Utilisateurs" width="80px" height="80px"/></a></div>
+    </div>
+</div>

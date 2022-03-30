@@ -1,0 +1,42 @@
+﻿@model RapidAuto.MVC.Models.Commande
+
+@{
+    ViewData["Title"] = "Create";
+    var vehicule = ViewData["VehiculeACommander"] as Vehicule;
+}
+
+<h1>Commander</h1>
+
+<h4>Commande</h4>
+<hr />
+<div>
+    <h4>Description du véhicule</h4>
+    <p>@vehicule.Description</p>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="NumeroIdentifiantUtilisateur" class="control-label"></label>
+                <input asp-for="NumeroIdentifiantUtilisateur" class="form-control" />
+                <span asp-validation-for="NumeroIdentifiantUtilisateur" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input hidden asp-for="IdVehicule" class="form-control" value="@vehicule.Id" />
+                <span asp-validation-for="NumeroIdentifiantUtilisateur" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Valider" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Vehicule" asp-action="Index">Retourner à la liste des véhicules</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

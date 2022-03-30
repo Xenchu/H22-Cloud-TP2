@@ -1,0 +1,29 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  serviceConnection: 'az-serviceprincipal'
+  resourceGroupName: 'rg-tp2-1296372'
+  location: 'canadacentral'
+  templateFile: '**/main.bicep'
+  administratorPassword: 'Qwerpoi1234!'
+
+steps:
+- task: AzureCLI@2
+  inputs:
+    azureSubscription: $(serviceConnection)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az --version
+      az group create --name $(resourceGroupName) --location $(location)
+      az deployment group create --resource-group $(resourceGroupName) --template-file $(templateFile) --parameters administratorPassword=$(administratorPassword)
+  displayName: 'Déploiement des ressources sur Azure'

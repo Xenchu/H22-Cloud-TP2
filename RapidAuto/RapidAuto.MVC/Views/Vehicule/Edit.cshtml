@@ -1,0 +1,112 @@
+﻿@model RapidAuto.MVC.Models.Vehicule
+
+@{
+    ViewData["Title"] = "Edit";
+    var pathImages = @"https:\\localhost:7031\";
+}
+
+<h1>Modification d'un véhicule</h1>
+
+<h4>Véhicule</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Constructeur" class="control-label"></label>
+                <input asp-for="Constructeur" class="form-control" />
+                <span asp-validation-for="Constructeur" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Modele" class="control-label"></label>
+                <input asp-for="Modele" class="form-control" />
+                <span asp-validation-for="Modele" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Annee" class="control-label"></label>
+                <input asp-for="Annee" class="form-control" />
+                <span asp-validation-for="Annee" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeVehicule" class="control-label"></label>
+                 @Html.DropDownListFor(model => model.TypeVehicule, new SelectList(ViewBag.TypesDeVehicule), "- Modifier le type de véhicule -", new { @class = "form-control" })
+                <span asp-validation-for="TypeVehicule" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NombreDeSieges" class="control-label"></label>
+                <input asp-for="NombreDeSieges" class="form-control" />
+                <span asp-validation-for="NombreDeSieges" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Couleur" class="control-label"></label>
+                <input asp-for="Couleur" class="form-control" />
+                <span asp-validation-for="Couleur" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NIV" class="control-label"></label>
+                <input asp-for="NIV" class="form-control" />
+                <span asp-validation-for="NIV" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input hidden asp-for="NomImage1" class="form-control" />
+                <span asp-validation-for="NomImage1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input hidden asp-for="NomImage2" class="form-control" />
+                <span asp-validation-for="NomImage2" class="text-danger"></span>
+            </div>
+            <div class="div-flex2">
+                <div>
+                    @Html.DisplayNameFor(model => model.Image1)
+                    <img src="@(pathImages+Model.NomImage1)" alt="@Model.NomImage1" width="300px" height="200px" title="@Model.NomImage1"/>
+                </div>
+                <div>
+                    @Html.DisplayNameFor(model => model.Image2)
+                    <img src="@(pathImages+Model.NomImage2)" alt="@Model.NomImage2" width="300px" height="200px" title="@Model.NomImage2"/>
+                </div>
+            </div>
+            <p class="p_important">ATTENTION !!! Si vous voulez garder les mêmes images (ci-haut) veuillez ne pas sélectionner de nouvelles images-ci dessous.</p>
+            <div class="form-group">
+                <label asp-for="Image1" class="control-label"></label>
+                <input asp-for="Image1" class="form-control" />
+                <span asp-validation-for="Image1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image2" class="control-label"></label>
+                <input asp-for="Image2" class="form-control" />
+                <span asp-validation-for="Image2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="EstDisponible" /> @Html.DisplayNameFor(model => model.EstDisponible)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prix" class="control-label"></label>
+                <input asp-for="Prix" class="form-control" />
+                <span asp-validation-for="Prix" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input hidden asp-for="CodeUnique" class="form-control" />
+                <span asp-validation-for="CodeUnique" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Enregistrer" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Retourner à la liste des véhicules</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

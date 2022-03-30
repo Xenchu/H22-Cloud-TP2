@@ -1,0 +1,88 @@
+﻿@model RapidAuto.MVC.Models.Vehicule
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Ajout d'un véhicule</h1>
+
+<h4>Véhicule</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Constructeur" class="control-label"></label>
+                <input asp-for="Constructeur" class="form-control" />
+                <span asp-validation-for="Constructeur" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Modele" class="control-label"></label>
+                <input asp-for="Modele" class="form-control" />
+                <span asp-validation-for="Modele" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Annee" class="control-label"></label>
+                <input asp-for="Annee" class="form-control" />
+                <span asp-validation-for="Annee" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeVehicule" class="control-label"></label> 
+                @Html.DropDownListFor(model => model.TypeVehicule, new SelectList(ViewBag.TypesDeVehicule), "- Choisir un type de véhicule -", new { @class = "form-control" })
+                <span asp-validation-for="TypeVehicule" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NombreDeSieges" class="control-label"></label>
+                <input asp-for="NombreDeSieges" class="form-control" />
+                <span asp-validation-for="NombreDeSieges" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Couleur" class="control-label"></label>
+                <input asp-for="Couleur" class="form-control" />
+                <span asp-validation-for="Couleur" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NIV" class="control-label"></label>
+                <input asp-for="NIV" class="form-control" />
+                <span asp-validation-for="NIV" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image1" class="control-label"></label>
+                <input type="file" asp-for="Image1" class="form-control" />
+                <span asp-validation-for="Image1" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image2" class="control-label"></label>
+                <input type="file" asp-for="Image2" class="form-control" />
+                <span asp-validation-for="Image2" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input"  asp-for="EstDisponible" /> @Html.DisplayNameFor(model => model.EstDisponible)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prix" class="control-label"></label>
+                <input asp-for="Prix" class="form-control" />
+                <span asp-validation-for="Prix" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Ajouter" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Retourner à la liste des véhicules</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
